@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Amazon Product Search</title>
+    <link rel="stylesheet" href="css/amazon-search.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="logo">
+                <i class="fab fa-amazon"></i>
+                <h1>Amazon Search</h1>
+            </div>
+            <nav class="nav">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="cart.html" class="nav-link">Cart</a>
+                <a href="login.html" class="nav-link">Login</a>
+            </nav>
+        </header>
+
+        <main class="main">
+            <section class="search-section">
+                <div class="search-container">
+                    <h2 class="search-title">Find Your Perfect Product</h2>
+                    <p class="search-subtitle">Search millions of products on Amazon</p>
+                    
+                    <form class="search-form" id="searchForm">
+                        <div class="search-input-group">
+                            <input 
+                                type="text" 
+                                id="searchInput" 
+                                class="search-input" 
+                                placeholder="What are you looking for?"
+                                required
+                            >
+                            <button type="submit" class="search-btn" id="searchBtn">
+                                <i class="fas fa-search"></i>
+                                Search
+                            </button>
+                        </div>
+                        
+                        <div class="filters">
+                            <select id="categoryFilter" class="filter-select">
+                                <option value="">All Categories</option>
+                                <option value="electronics">Electronics</option>
+                                <option value="clothing">Clothing</option>
+                                <option value="books">Books</option>
+                                <option value="home">Home & Kitchen</option>
+                                <option value="sports">Sports & Outdoors</option>
+                                <option value="toys">Toys & Games</option>
+                            </select>
+                            
+                            <select id="sortFilter" class="filter-select">
+                                <option value="relevance">Most Relevant</option>
+                                <option value="price_low_to_high">Price: Low to High</option>
+                                <option value="price_high_to_low">Price: High to Low</option>
+                                <option value="customer_review">Customer Reviews</option>
+                                <option value="newest">Newest Arrivals</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+            </section>
+
+            <section class="results-section" id="resultsSection" style="display: none;">
+                <div class="results-header">
+                    <h3 id="resultsTitle">Search Results</h3>
+                    <div class="results-count" id="resultsCount"></div>
+                </div>
+                
+                <div class="loading" id="loading" style="display: none;">
+                    <div class="spinner"></div>
+                    <p>Searching Amazon...</p>
+                </div>
+                
+                <div class="error-message" id="errorMessage" style="display: none;">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <p>Something went wrong. Please try again.</p>
+                </div>
+                
+                <div class="products-grid" id="productsGrid"></div>
+                
+                <div class="pagination" id="pagination" style="display: none;">
+                    <button class="pagination-btn" id="prevBtn" disabled>
+                        <i class="fas fa-chevron-left"></i>
+                        Previous
+                    </button>
+                    <span class="pagination-info" id="paginationInfo"></span>
+                    <button class="pagination-btn" id="nextBtn">
+                        Next
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <p>&copy; 2024 Amazon Search. Powered by SerpAPI</p>
+        </footer>
+    </div>
+
+    <script src="js/amazon-search.js"></script>
+</body>
+</html>
