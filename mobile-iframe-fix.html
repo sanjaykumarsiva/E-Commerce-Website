@@ -1,0 +1,200 @@
+/* Fixed Mobile Iframe Styles */
+.milestone-panel {
+    background-color: var(--bg-card);
+    padding: 16px;
+    border-radius: 12px;
+    border: 1px solid var(--border-color); 
+    max-width: 400px;
+    box-shadow: var(--shadow);
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+    /* Fix for mobile */
+    min-height: 350px;
+}
+
+.iframe-container {
+    width: 100%;
+    height: 300px;
+    background-color: var(--bg-primary);
+    border-radius: 8px;
+    overflow: hidden; /* Changed from auto to hidden */
+    border: 1px solid var(--border-color);
+    position: relative;
+    transition: background-color 0.3s ease;
+    
+    /* Remove flex centering that can cause issues */
+    display: block;
+}
+
+.iframe-container iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    background-color: transparent;
+    
+    /* Remove problematic positioning */
+    position: static;
+    
+    /* Remove filters that cause display issues */
+    filter: none;
+    transform: none;
+    
+    /* Ensure proper display */
+    display: block;
+    
+    /* Mobile-specific fixes */
+    -webkit-transform: translate3d(0,0,0);
+    transform: translate3d(0,0,0);
+    
+    /* Allow scrolling */
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Remove theme-based filter that causes issues */
+.theme-checkbox:checked ~ .dashboard .iframe-container iframe {
+    /* Remove the invert filter that causes content to disappear */
+    filter: none;
+    background-color: transparent;
+}
+
+.theme-checkbox:checked ~ .dashboard .iframe-container {
+    background-color: var(--bg-primary);
+    border: 1px solid var(--border-color);
+}
+
+/* Mobile-specific iframe fixes */
+@media (max-width: 768px) {
+    .milestone-panel {
+        max-width: 100%;
+        margin-bottom: 20px;
+        min-height: 300px;
+    }
+    
+    .iframe-container {
+        height: 250px;
+        /* Ensure proper mobile display */
+        overflow: visible;
+        -webkit-overflow-scrolling: touch;
+        
+        /* Add mobile-specific background */
+        background: #ffffff;
+    }
+    
+    .iframe-container iframe {
+        /* Ensure iframe is properly sized on mobile */
+        min-width: 100%;
+        min-height: 100%;
+        width: 100%;
+        height: 100%;
+        
+        /* Mobile performance optimizations */
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
+        -webkit-perspective: 1000;
+        perspective: 1000;
+        
+        /* Force hardware acceleration */
+        -webkit-transform: translateZ(0);
+        transform: translateZ(0);
+        
+        /* Ensure proper mobile scrolling */
+        overflow: auto;
+        -webkit-overflow-scrolling: touch;
+        
+        /* Remove any filters on mobile */
+        filter: none !important;
+        
+        /* Ensure visibility */
+        opacity: 1;
+        visibility: visible;
+        
+        /* Set a white background for mobile */
+        background-color: #ffffff !important;
+    }
+    
+    /* Dark mode adjustments for mobile */
+    .theme-checkbox:checked ~ .dashboard .iframe-container {
+        background: #000000;
+    }
+    
+    .theme-checkbox:checked ~ .dashboard .iframe-container iframe {
+        /* Still no filters on mobile even in dark mode */
+        filter: none !important;
+        background-color: #000000 !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .milestone-panel {
+        padding: 12px;
+        min-height: 250px;
+    }
+    
+    .milestone-panel h4 {
+        font-size: 16px;
+        margin-bottom: 10px;
+    }
+    
+    .iframe-container {
+        height: 200px;
+        border-radius: 6px;
+    }
+    
+    .iframe-container iframe {
+        /* Smaller screens need explicit sizing */
+        width: 100% !important;
+        height: 100% !important;
+        max-width: 100%;
+        max-height: 100%;
+        
+        /* Ensure no transform issues on small screens */
+        transform: none !important;
+        -webkit-transform: none !important;
+    }
+}
+
+/* Alternative loading solution for mobile iframe issues */
+.iframe-fallback {
+    display: none;
+    width: 100%;
+    height: 100%;
+    background-color: var(--bg-tertiary);
+    border-radius: 8px;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+    padding: 20px;
+}
+
+.iframe-fallback-text {
+    color: var(--text-secondary);
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+.iframe-fallback-link {
+    color: var(--accent-blue);
+    text-decoration: none;
+    font-weight: 500;
+    padding: 8px 16px;
+    border: 1px solid var(--accent-blue);
+    border-radius: 6px;
+    transition: all 0.3s ease;
+}
+
+.iframe-fallback-link:hover {
+    background-color: var(--accent-blue);
+    color: white;
+}
+
+/* Show fallback on mobile if iframe fails to load */
+@media (max-width: 768px) {
+    .iframe-container.iframe-error iframe {
+        display: none;
+    }
+    
+    .iframe-container.iframe-error .iframe-fallback {
+        display: flex;
+    }
+}

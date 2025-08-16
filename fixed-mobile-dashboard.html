@@ -1,0 +1,305 @@
+<%{
+    mng = Manager[ID != 0];
+    team = Team_Members[ID != 0];
+    tsk = Add_Task[ID != 0];
+    prj = PROJECT[ID != 0];
+    %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Project Management Dashboard</title>
+    <style>
+        /* Your existing CSS styles here - I'll focus on the iframe fixes */
+        
+        /* FIXED IFRAME STYLES FOR MOBILE */
+        .milestone-panel {
+            background-color: var(--bg-card);
+            padding: 16px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color); 
+            max-width: 400px;
+            box-shadow: var(--shadow);
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+            min-height: 350px;
+        }
+
+        .iframe-container {
+            width: 100%;
+            height: 300px;
+            background-color: var(--bg-primary);
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            position: relative;
+            transition: background-color 0.3s ease;
+            display: block;
+        }
+
+        .iframe-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            background-color: transparent;
+            position: static;
+            filter: none;
+            transform: none;
+            display: block;
+            -webkit-transform: translate3d(0,0,0);
+            transform: translate3d(0,0,0);
+            overflow: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        /* Remove problematic dark mode filters */
+        .theme-checkbox:checked ~ .dashboard .iframe-container iframe {
+            filter: none !important;
+            background-color: transparent;
+        }
+
+        .theme-checkbox:checked ~ .dashboard .iframe-container {
+            background-color: var(--bg-primary);
+            border: 1px solid var(--border-color);
+        }
+
+        /* Fallback for iframe loading issues */
+        .iframe-fallback {
+            display: none;
+            width: 100%;
+            height: 100%;
+            background-color: var(--bg-tertiary);
+            border-radius: 8px;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .iframe-fallback-text {
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .iframe-fallback-link {
+            color: var(--accent-blue);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 8px 16px;
+            border: 1px solid var(--accent-blue);
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+
+        .iframe-fallback-link:hover {
+            background-color: var(--accent-blue);
+            color: white;
+        }
+
+        /* Mobile-specific iframe fixes */
+        @media (max-width: 768px) {
+            .milestone-panel {
+                max-width: 100%;
+                margin-bottom: 20px;
+                min-height: 300px;
+            }
+            
+            .iframe-container {
+                height: 250px;
+                overflow: visible;
+                -webkit-overflow-scrolling: touch;
+                background: #ffffff;
+            }
+            
+            .iframe-container iframe {
+                min-width: 100%;
+                min-height: 100%;
+                width: 100%;
+                height: 100%;
+                -webkit-backface-visibility: hidden;
+                backface-visibility: hidden;
+                -webkit-perspective: 1000;
+                perspective: 1000;
+                -webkit-transform: translateZ(0);
+                transform: translateZ(0);
+                overflow: auto;
+                -webkit-overflow-scrolling: touch;
+                filter: none !important;
+                opacity: 1;
+                visibility: visible;
+                background-color: #ffffff !important;
+            }
+            
+            .theme-checkbox:checked ~ .dashboard .iframe-container {
+                background: #000000;
+            }
+            
+            .theme-checkbox:checked ~ .dashboard .iframe-container iframe {
+                filter: none !important;
+                background-color: #000000 !important;
+            }
+
+            /* Show fallback if iframe fails */
+            .iframe-container.iframe-error iframe {
+                display: none;
+            }
+            
+            .iframe-container.iframe-error .iframe-fallback {
+                display: flex;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .milestone-panel {
+                padding: 12px;
+                min-height: 250px;
+            }
+            
+            .milestone-panel h4 {
+                font-size: 16px;
+                margin-bottom: 10px;
+            }
+            
+            .iframe-container {
+                height: 200px;
+                border-radius: 6px;
+            }
+            
+            .iframe-container iframe {
+                width: 100% !important;
+                height: 100% !important;
+                max-width: 100%;
+                max-height: 100%;
+                transform: none !important;
+                -webkit-transform: none !important;
+            }
+        }
+
+        /* Add all your other existing CSS styles here */
+        /* ... rest of your CSS ... */
+    </style>
+</head>
+<body>
+    <!-- Your existing loader and content -->
+    
+    <!-- FIXED IFRAME SECTIONS -->
+    <div class="milestone-panel">
+        <h4 id="milestones">Overall Project Status</h4>
+        <div class="iframe-container" id="project-status-iframe">
+            <iframe 
+                src="https://creatorapp.zoho.com/zappy_admin/project-management-replica/page-embed/Project_Process_Chart" 
+                frameborder="0" 
+                allowfullscreen
+                scrolling="auto"
+                loading="lazy"
+                onload="handleIframeLoad(this)"
+                onerror="handleIframeError(this)"
+                style="background-color: transparent;">
+            </iframe>
+            <div class="iframe-fallback">
+                <div class="iframe-fallback-text">Content not available on this device</div>
+                <a href="https://creatorapp.zoho.com/zappy_admin/project-management-replica/page-embed/Project_Process_Chart" 
+                   target="_blank" 
+                   class="iframe-fallback-link">
+                   View in New Tab
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="milestone-panel">
+        <h4 id="project-percentage">Overall Milestone Status</h4>
+        <div class="iframe-container" id="milestone-status-iframe">
+            <iframe 
+                src="https://creatorapp.zoho.com/zappy_admin/project-management-replica/page-embed/Project_Percentage" 
+                frameborder="0" 
+                allowfullscreen
+                scrolling="auto"
+                loading="lazy"
+                onload="handleIframeLoad(this)"
+                onerror="handleIframeError(this)"
+                style="background-color: transparent;">
+            </iframe>
+            <div class="iframe-fallback">
+                <div class="iframe-fallback-text">Content not available on this device</div>
+                <a href="https://creatorapp.zoho.com/zappy_admin/project-management-replica/page-embed/Project_Percentage" 
+                   target="_blank" 
+                   class="iframe-fallback-link">
+                   View in New Tab
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // JavaScript to handle iframe loading issues on mobile
+        function handleIframeLoad(iframe) {
+            console.log('Iframe loaded successfully');
+            // Ensure iframe is visible
+            iframe.style.display = 'block';
+            iframe.style.visibility = 'visible';
+        }
+
+        function handleIframeError(iframe) {
+            console.log('Iframe failed to load');
+            const container = iframe.closest('.iframe-container');
+            if (container) {
+                container.classList.add('iframe-error');
+            }
+        }
+
+        // Check if iframe content is actually loaded after a delay
+        function checkIframeContent() {
+            const iframes = document.querySelectorAll('.iframe-container iframe');
+            iframes.forEach(iframe => {
+                try {
+                    // Try to access iframe content (will fail for cross-origin)
+                    setTimeout(() => {
+                        if (!iframe.contentDocument && !iframe.contentWindow) {
+                            handleIframeError(iframe);
+                        }
+                    }, 3000);
+                } catch (e) {
+                    // Cross-origin, but iframe might still be working
+                    console.log('Cross-origin iframe detected');
+                }
+            });
+        }
+
+        // Run checks after page load
+        document.addEventListener('DOMContentLoaded', function() {
+            checkIframeContent();
+            
+            // Mobile-specific fixes
+            if (window.innerWidth <= 768) {
+                // Add mobile class for additional styling
+                document.body.classList.add('mobile-device');
+                
+                // Force iframe refresh on mobile after a delay
+                setTimeout(() => {
+                    const iframes = document.querySelectorAll('.iframe-container iframe');
+                    iframes.forEach(iframe => {
+                        const src = iframe.src;
+                        iframe.src = '';
+                        setTimeout(() => {
+                            iframe.src = src;
+                        }, 100);
+                    });
+                }, 1000);
+            }
+        });
+
+        // Handle orientation changes on mobile
+        window.addEventListener('orientationchange', function() {
+            setTimeout(() => {
+                const iframes = document.querySelectorAll('.iframe-container iframe');
+                iframes.forEach(iframe => {
+                    iframe.style.height = iframe.parentElement.clientHeight + 'px';
+                });
+            }, 500);
+        });
+    </script>
+</body>
+</html>
